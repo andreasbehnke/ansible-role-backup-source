@@ -1,0 +1,17 @@
+---
+
+  - name: install rsync service
+    become: yes
+    apt:
+      name: 'rsync'
+      state: 'latest'
+
+  - name: add backup user to groups, making sure backup user is allowed to read files
+    become: yes
+    user:
+      name: '{{ item.user }}'
+      groups: '{{ item.group }}'
+      append: yes
+    with_items:
+      - '{{ backup_sources }}'
+    when: item.group is defined
